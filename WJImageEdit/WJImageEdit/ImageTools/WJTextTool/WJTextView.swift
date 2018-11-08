@@ -16,7 +16,7 @@ class WJTextView: UIView {
     var nav: WJNavShadeView!
     
     let textFont = UIFont(name: "PingFangSC-Regular", size: 20)
-    var currentColor: UIColor! = UIColor.red
+    var currentColor: UIColor! = UIColor.white
     
     var textImage: UIImage!
     
@@ -120,6 +120,7 @@ class WJTextView: UIView {
         guard let context = UIGraphicsGetCurrentContext() else {
             return nil
         }
+        self.backgroundColor?.setFill()
         
         //保存初始状态
         context.saveGState()
@@ -136,10 +137,9 @@ class WJTextView: UIView {
 //        绘制边框
 //        context.addPath(path)
 //        context.strokePath()
-        
         //根据framesetter和绘图区域创建CTFrame
         let str = textView.text
-        let attributes = [NSAttributedStringKey.font: textFont!, kCTStrokeColorAttributeName: currentColor ] as! [NSAttributedStringKey : Any]
+        let attributes = [NSAttributedStringKey.font: textFont!, NSAttributedStringKey.foregroundColor: currentColor ] as [NSAttributedStringKey : Any]
         let attrString = NSAttributedString(string:str!, attributes: attributes)
         
         let framesetter = CTFramesetterCreateWithAttributedString(attrString)

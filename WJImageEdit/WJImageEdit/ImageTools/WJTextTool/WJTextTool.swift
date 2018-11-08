@@ -36,12 +36,22 @@ class WJTextTool: NSObject {
             imv.center = CGPoint(x: self.editor.imageView.width/2, y: self.editor.imageView.height/2)
             self.editor.imageView.addSubview(imv)
             
+            /// 拖拽
             imv.panRecongnizer = { (point, recognizer, end) in
                 let center = imv.frame.origin
                 imv.frame.origin = CGPoint(x: center.x + point.x, y: center.y + point.y)
                 
                 self.editor.menuView.configImageBar(end ? .editing : .dele )
                 
+                /// 文本拖拽到图片外,重置文本位置
+                if recognizer.location(in: self.editor.imageView).y < 5
+                    || recognizer.location(in: self.editor.imageView).y > self.editor.imageView.height - 5 {
+                    if end {
+                        imv.center = CGPoint(x: self.editor.imageView.width / 2, y: self.editor.imageView.height / 2)
+                    }
+                }
+                
+                /// 删除文本
                 let touch_point = recognizer.location(in: self.editor.view)
                 let m_left = self.editor.view.width / 2 - 40
                 let m_right = self.editor.view.width / 2 + 40
@@ -57,6 +67,7 @@ class WJTextTool: NSObject {
                 }
             }
             
+            /// 捏合
             imv.pinchRecongnizer = {(scale,p1, num, end) in
                 imv.transform = CGAffineTransform(scaleX: scale, y: scale)
                 if end && num == 2{
